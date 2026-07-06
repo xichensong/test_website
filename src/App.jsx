@@ -70,12 +70,165 @@ function BananaDisplay({ progress }) {
   )
 }
 
+function WineModel() {
+  const { scene } = useGLTF('/models/wine_bottles_01_4k.glb')
+
+  return (
+    <group rotation={[0, 0, 0]} scale={5.2}>
+      <Center>
+        <primitive object={scene} />
+      </Center>
+    </group>
+  )
+}
+
+function WineCamera() {
+  const { camera } = useThree()
+
+  useEffect(() => {
+    camera.position.set(0, 0, 6.2)
+    camera.lookAt(0, 0, 0)
+    camera.updateProjectionMatrix()
+  }, [camera])
+
+  return null
+}
+
+function WineDisplay({ progress }) {
+  return (
+    <div
+      className="section-model-display wine-display"
+      aria-label="3D wine bottles model"
+      style={{ '--section-model-progress': progress }}
+    >
+      <Canvas frameloop="demand" camera={{ fov: 28, near: 0.1, far: 100 }}>
+        <WineCamera />
+        <ambientLight intensity={1.5} />
+        <directionalLight position={[4, -5, 6]} intensity={2.4} />
+        <directionalLight position={[-4, -2, -3]} intensity={0.75} />
+        <Suspense fallback={null}>
+          <WineModel />
+        </Suspense>
+      </Canvas>
+    </div>
+  )
+}
+
+function SnackModel() {
+  const { scene } = useGLTF('/models/long_life_food_4k.glb')
+
+  return (
+    <group rotation={[0, 0, 0]} scale={5.1}>
+      <Center>
+        <primitive object={scene} />
+      </Center>
+    </group>
+  )
+}
+
+function SnackCamera() {
+  const { camera } = useThree()
+
+  useEffect(() => {
+    camera.position.set(0, 0, 6)
+    camera.lookAt(0, 0, 0)
+    camera.updateProjectionMatrix()
+  }, [camera])
+
+  return null
+}
+
+function SnackDisplay({ progress }) {
+  return (
+    <div
+      className="section-model-display snack-display"
+      aria-label="3D packaged food model"
+      style={{ '--section-model-progress': progress }}
+    >
+      <Canvas frameloop="demand" camera={{ fov: 30, near: 0.1, far: 100 }}>
+        <SnackCamera />
+        <ambientLight intensity={1.55} />
+        <directionalLight position={[4, -5, 6]} intensity={2.2} />
+        <directionalLight position={[-4, -2, -3]} intensity={0.8} />
+        <Suspense fallback={null}>
+          <SnackModel />
+        </Suspense>
+      </Canvas>
+    </div>
+  )
+}
+
+function CleanerModel() {
+  const { scene } = useGLTF('/models/all_purpose_cleaner_4k.glb')
+
+  return (
+    <group rotation={[0, 0, 0]} scale={5.2}>
+      <Center>
+        <primitive object={scene} />
+      </Center>
+    </group>
+  )
+}
+
+function CleanerCamera() {
+  const { camera } = useThree()
+
+  useEffect(() => {
+    camera.position.set(0, 0, 6)
+    camera.lookAt(0, 0, 0)
+    camera.updateProjectionMatrix()
+  }, [camera])
+
+  return null
+}
+
+function CleanerDisplay({ progress }) {
+  return (
+    <div
+      className="section-model-display cleaner-display"
+      aria-label="3D cleaner bottle model"
+      style={{ '--section-model-progress': progress }}
+    >
+      <Canvas frameloop="demand" camera={{ fov: 30, near: 0.1, far: 100 }}>
+        <CleanerCamera />
+        <ambientLight intensity={1.55} />
+        <directionalLight position={[4, -5, 6]} intensity={2.2} />
+        <directionalLight position={[-4, -2, -3]} intensity={0.8} />
+        <Suspense fallback={null}>
+          <CleanerModel />
+        </Suspense>
+      </Canvas>
+    </div>
+  )
+}
+
+function getSectionProgress(section) {
+  if (!section) return 0
+
+  const rect = section.getBoundingClientRect()
+  const viewportHeight = window.innerHeight || 1
+  const enterStart = viewportHeight * 0.86
+  const enterEnd = viewportHeight * 0.48
+  const exitStart = viewportHeight * 0.26
+  const exitEnd = -rect.height * 0.12
+  const entering = (enterStart - rect.top) / (enterStart - enterEnd)
+  const exiting = (rect.top - exitEnd) / (exitStart - exitEnd)
+
+  return Math.min(Math.max(entering, 0), Math.max(exiting, 0), 1)
+}
+
 export default function App() {
   const heroRef = useRef(null)
   const artRef = useRef(null)
+  const drinksRef = useRef(null)
+  const snacksRef = useRef(null)
   const pantryRef = useRef(null)
+  const homeRef = useRef(null)
   const [wordmarkProgress, setWordmarkProgress] = useState(0)
+  const [wineProgress, setWineProgress] = useState(0)
+  const [snackProgress, setSnackProgress] = useState(0)
   const [bananaProgress, setBananaProgress] = useState(0)
+  const [cleanerProgress, setCleanerProgress] = useState(0)
   const [wordmarkLayout, setWordmarkLayout] = useState({
     left: 0,
     top: 0,
@@ -94,33 +247,19 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    const updateBanana = () => {
-      const pantry = pantryRef.current
-      if (!pantry) return
-
-      const rect = pantry.getBoundingClientRect()
-      const viewportHeight = window.innerHeight || 1
-      const enterStart = viewportHeight * 0.86
-      const enterEnd = viewportHeight * 0.48
-      const exitStart = viewportHeight * 0.26
-      const exitEnd = -rect.height * 0.12
-      const entering = (enterStart - rect.top) / (enterStart - enterEnd)
-      const exiting = (rect.top - exitEnd) / (exitStart - exitEnd)
-      const progress = Math.min(
-        Math.max(entering, 0),
-        Math.max(exiting, 0),
-        1,
-      )
-
-      setBananaProgress(progress)
+    const updateSectionModels = () => {
+      setWineProgress(getSectionProgress(drinksRef.current))
+      setSnackProgress(getSectionProgress(snacksRef.current))
+      setBananaProgress(getSectionProgress(pantryRef.current))
+      setCleanerProgress(getSectionProgress(homeRef.current))
     }
 
-    updateBanana()
-    window.addEventListener('scroll', updateBanana, { passive: true })
-    window.addEventListener('resize', updateBanana)
+    updateSectionModels()
+    window.addEventListener('scroll', updateSectionModels, { passive: true })
+    window.addEventListener('resize', updateSectionModels)
     return () => {
-      window.removeEventListener('scroll', updateBanana)
-      window.removeEventListener('resize', updateBanana)
+      window.removeEventListener('scroll', updateSectionModels)
+      window.removeEventListener('resize', updateSectionModels)
     }
   }, [])
 
@@ -139,7 +278,7 @@ export default function App() {
       const renderedHeight = art.naturalHeight * imageScale
       const offsetY = (heroRect.height - renderedHeight) / 2
       const left = 860 * imageScale
-      const top = offsetY + 820 * imageScale
+      const top = offsetY + 875 * imageScale
       const availableWidth = Math.max(heroRect.width - left - 24, 80)
       const size = Math.min(154 * imageScale, availableWidth / 5.9)
 
@@ -180,6 +319,13 @@ export default function App() {
           alt="Black silhouette of an Ethiopian church dome and cross"
           ref={artRef}
         />
+        <img
+          className="hero-art hero-art-transition"
+          src="/second.jpg"
+          alt=""
+          aria-hidden="true"
+          style={{ '--hero-transition-progress': wordmarkProgress }}
+        />
 
         <div
           className="embedded-title"
@@ -216,13 +362,40 @@ export default function App() {
           {categories.map((category) => (
             <article
               className={`category-section${
-                category.title === 'Pantry and Quick Meals' ? ' pantry-section' : ''
+                category.title === 'Drinks and Alcohol'
+                  ? ' drinks-section'
+                  : category.title === 'Snacks and Tobacco'
+                    ? ' snacks-section'
+                  : category.title === 'Pantry and Quick Meals'
+                    ? ' pantry-section'
+                  : category.title === 'Home and Dairy Basics'
+                    ? ' home-section'
+                    : ''
               }`}
               key={category.title}
-              ref={category.title === 'Pantry and Quick Meals' ? pantryRef : null}
+              ref={
+                category.title === 'Drinks and Alcohol'
+                  ? drinksRef
+                  : category.title === 'Snacks and Tobacco'
+                    ? snacksRef
+                  : category.title === 'Pantry and Quick Meals'
+                    ? pantryRef
+                  : category.title === 'Home and Dairy Basics'
+                    ? homeRef
+                    : null
+              }
             >
+              {category.title === 'Drinks and Alcohol' && (
+                <WineDisplay progress={wineProgress} />
+              )}
+              {category.title === 'Snacks and Tobacco' && (
+                <SnackDisplay progress={snackProgress} />
+              )}
               {category.title === 'Pantry and Quick Meals' && (
                 <BananaDisplay progress={bananaProgress} />
+              )}
+              {category.title === 'Home and Dairy Basics' && (
+                <CleanerDisplay progress={cleanerProgress} />
               )}
               <div>
                 <p className="eyebrow">Mela Market</p>

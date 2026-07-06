@@ -36,6 +36,10 @@
   z-index: 0;
 }
 
+.hero-art-transition {
+  opacity: var(--hero-transition-progress, 0);
+}
+
 .embedded-title {
   position: absolute;
   left: var(--wordmark-left, 0);
@@ -153,7 +157,7 @@
   overflow: hidden;
 }
 
-.category-section > div:not(.banana-display) {
+.category-section > div:not(.banana-display):not(.section-model-display) {
   position: relative;
   z-index: 2;
 }
@@ -182,6 +186,7 @@
   font-weight: 750;
 }
 
+.section-model-display,
 .banana-display {
   position: absolute;
   right: clamp(-72px, -5vw, -28px);
@@ -189,21 +194,49 @@
   z-index: 1;
   width: clamp(500px, 64vw, 860px);
   height: min(178%, 600px);
-  opacity: var(--banana-progress, 0);
+  opacity: var(--section-model-progress, var(--banana-progress, 0));
   overflow: visible;
   pointer-events: none;
   transform: translate(
-      calc((1 - var(--banana-progress, 0)) * 52%),
+      calc((1 - var(--section-model-progress, var(--banana-progress, 0))) * 52%),
       -50%
     )
-    scale(calc(0.96 + var(--banana-progress, 0) * 0.04));
+    scale(calc(0.96 + var(--section-model-progress, var(--banana-progress, 0)) * 0.04));
   transition:
     opacity 180ms ease-out,
     transform 220ms ease-out;
 }
 
+.section-model-display canvas,
 .banana-display canvas {
   display: block;
+}
+
+.wine-display {
+  right: clamp(18px, 4vw, 72px);
+  top: 51%;
+  width: clamp(620px, 74vw, 1040px);
+  height: min(220%, 720px);
+}
+
+.snack-display,
+.cleaner-display {
+  right: auto;
+  left: clamp(18px, 4vw, 72px);
+  top: 51%;
+  width: clamp(640px, 76vw, 1060px);
+  height: min(220%, 720px);
+  transform: translate(
+      calc((1 - var(--section-model-progress, 0)) * -52%),
+      -50%
+    )
+    scale(calc(0.96 + var(--section-model-progress, 0) * 0.04));
+}
+
+.cleaner-display {
+  left: clamp(18px, 4vw, 72px);
+  width: clamp(540px, 66vw, 900px);
+  height: min(214%, 680px);
 }
 
 @media (max-width: 900px) {
@@ -218,11 +251,34 @@
     grid-template-columns: 1fr;
   }
 
+  .section-model-display,
   .banana-display {
     right: -72px;
     width: min(86vw, 620px);
     height: 400px;
     top: 56%;
+  }
+
+  .wine-display {
+    right: 18px;
+    width: min(112vw, 760px);
+    height: 500px;
+    top: 54%;
+  }
+
+  .snack-display,
+  .cleaner-display {
+    right: auto;
+    left: 18px;
+    width: min(112vw, 780px);
+    height: 500px;
+    top: 55%;
+  }
+
+  .cleaner-display {
+    left: 18px;
+    width: min(96vw, 660px);
+    height: 460px;
   }
 }
 
@@ -239,10 +295,33 @@
     flex: 1 1 100%;
   }
 
+  .section-model-display,
   .banana-display {
     right: -64px;
     width: 105vw;
     height: 310px;
     top: 62%;
+  }
+
+  .wine-display {
+    right: 12px;
+    width: 128vw;
+    height: 400px;
+    top: 60%;
+  }
+
+  .snack-display,
+  .cleaner-display {
+    right: auto;
+    left: 12px;
+    width: 128vw;
+    height: 400px;
+    top: 60%;
+  }
+
+  .cleaner-display {
+    left: 12px;
+    width: 112vw;
+    height: 360px;
   }
 }

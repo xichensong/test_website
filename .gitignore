@@ -1,0 +1,4 @@
+dist/
+node_modules/
+.DS_Store
+public/models/wine_bottles_01_4k.glb
