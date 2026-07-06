@@ -70,6 +70,10 @@
   text-shadow: 0 1px 0 rgba(232, 143, 0, 0.34);
 }
 
+.mobile-wordmark {
+  display: none;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -94,7 +98,8 @@
 .embedded-title h1,
 .intro-section h2,
 .goods-section h2,
-.category-section h2 {
+.category-section h2,
+.market-footer h2 {
   margin: 0;
   color: inherit;
   font-weight: 850;
@@ -137,6 +142,67 @@
 
 .goods-section {
   background: #000000;
+}
+
+.market-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(280px, 0.74fr);
+  gap: clamp(32px, 7vw, 104px);
+  padding: clamp(64px, 8vw, 112px) clamp(20px, 5vw, 72px);
+  border-top: 1px solid rgba(246, 196, 67, 0.24);
+  background: #000000;
+  color: #f8f1dc;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.market-footer h2 {
+  max-width: 720px;
+  font-size: clamp(2.4rem, 5.6vw, 5.2rem);
+}
+
+.footer-details {
+  display: grid;
+  gap: 28px;
+  align-content: start;
+  color: #f8f1dc;
+  font-size: clamp(1.2rem, 2.2vw, 1.85rem);
+  line-height: 1.18;
+}
+
+.footer-details address,
+.footer-details a,
+.hours-list {
+  margin: 0;
+  color: inherit;
+  font-style: normal;
+  text-decoration: none;
+}
+
+.footer-details address {
+  display: grid;
+  gap: 4px;
+}
+
+.footer-details a {
+  width: fit-content;
+  border-bottom: 1px solid rgba(246, 196, 67, 0.72);
+}
+
+.hours-list {
+  display: grid;
+  gap: 14px;
+}
+
+.hours-list p {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+
+.hours-list span:first-child {
+  color: #f1c64a;
+  font-size: 0.78em;
+  text-transform: uppercase;
 }
 
 .category-list {
@@ -249,7 +315,8 @@
   }
 
   .section-grid,
-  .category-section {
+  .category-section,
+  .market-footer {
     grid-template-columns: 1fr;
   }
 
@@ -297,7 +364,17 @@
   }
 
   .embedded-title h1 {
+    color: #f8f1dc;
     line-height: 0.9;
+    text-shadow: none;
+  }
+
+  .desktop-wordmark {
+    display: none;
+  }
+
+  .mobile-wordmark {
+    display: block;
   }
 
   .category-section li {

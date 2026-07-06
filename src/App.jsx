@@ -4,22 +4,60 @@ import './App.css'
 const categories = [
   {
     title: 'Drinks and Alcohol',
-    items: ['Beer', 'Wine', 'Soda', 'Juice'],
+    items: [
+      'Beer',
+      'Wine',
+      'Soda',
+      'Juice',
+      'Water',
+      'Energy drinks',
+      'Iced tea',
+      'Mixers',
+    ],
     text: 'Cold drinks for a quick stop, party run, or dinner at home, with beer and wine alongside everyday sodas and juices.',
   },
   {
     title: 'Snacks and Tobacco',
-    items: ['Chips', 'Cigarettes'],
+    items: [
+      'Chips',
+      'Cigarettes',
+      'Candy',
+      'Gum',
+      'Cookies',
+      'Crackers',
+      'Nuts',
+      'Chocolate',
+    ],
     text: 'Grab-and-go snacks and tobacco products kept simple for fast neighborhood errands.',
   },
   {
     title: 'Pantry and Quick Meals',
-    items: ['Noodles', 'Cooking foods', 'Pasta'],
+    items: [
+      'Noodles',
+      'Cooking foods',
+      'Pasta',
+      'Rice',
+      'Canned foods',
+      'Sauces',
+      'Spices',
+      'Coffee',
+      'Tea',
+    ],
     text: 'Shelf-stable basics for easy meals, from pasta and noodles to cooking ingredients that help finish dinner.',
   },
   {
     title: 'Home and Dairy Basics',
-    items: ['Dairy', 'Detergents'],
+    items: [
+      'Dairy',
+      'Detergents',
+      'Milk',
+      'Eggs',
+      'Butter',
+      'Cheese',
+      'Paper goods',
+      'Cleaning sprays',
+      'Soap',
+    ],
     text: 'Daily home essentials, including dairy for the fridge and detergents for the household.',
   },
 ]
@@ -173,10 +211,9 @@ export default function App() {
       let size = Math.min(154 * imageScale, availableWidth / 5.9)
 
       if (isMobile) {
-        size = Math.max(30, Math.min(52, (heroRect.width - 128) / 5.9))
-        const maxLeft = Math.max(12, heroRect.width - size * 5.9 - 12)
-        left = Math.min(Math.max(artOffsetX + 615 * imageScale, 86), maxLeft)
-        top = offsetY + 872 * imageScale
+        size = Math.max(36, Math.min(52, (heroRect.width - 48) / 6.4))
+        left = Math.max(18, (heroRect.width - size * 6.4) / 2)
+        top = heroRect.height * 0.81
       }
 
       setWordmarkLayout({
@@ -238,8 +275,11 @@ export default function App() {
           }}
         >
           <h1>
-            <span className="sr-only">M</span>
-            <span aria-hidden="true">ela Market</span>
+            <span className="desktop-wordmark">
+              <span className="sr-only">M</span>
+              <span aria-hidden="true">ela Market</span>
+            </span>
+            <span className="mobile-wordmark">Mela Market</span>
           </h1>
         </div>
       </section>
@@ -313,6 +353,34 @@ export default function App() {
           ))}
         </div>
       </section>
+
+      <footer className="market-footer" aria-label="Mela Market contact information">
+        <div className="footer-heading">
+          <p className="eyebrow">Visit Mela Market</p>
+          <h2>Stop by or call ahead.</h2>
+        </div>
+        <div className="footer-details">
+          <address>
+            <span>8711 1st Ave</span>
+            <span>Silver Spring, MD 20910</span>
+          </address>
+          <a href="tel:+13015851051">(301) 585-1051</a>
+          <div className="hours-list" aria-label="Store hours">
+            <p>
+              <span>Monday, Tuesday, Thursday</span>
+              <span>12PM-9:30PM</span>
+            </p>
+            <p>
+              <span>Wednesday, Saturday</span>
+              <span>12PM-10PM</span>
+            </p>
+            <p>
+              <span>Sunday</span>
+              <span>12PM-8PM</span>
+            </p>
+          </div>
+        </div>
+      </footer>
     </main>
   )
 }
