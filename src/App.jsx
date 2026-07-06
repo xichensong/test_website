@@ -384,16 +384,16 @@ export default function App() {
                     : null
               }
             >
-              {category.title === 'Drinks and Alcohol' && (
+              {category.title === 'Drinks and Alcohol' && wineProgress > 0 && (
                 <WineDisplay progress={wineProgress} />
               )}
-              {category.title === 'Snacks and Tobacco' && (
+              {category.title === 'Snacks and Tobacco' && snackProgress > 0 && (
                 <SnackDisplay progress={snackProgress} />
               )}
-              {category.title === 'Pantry and Quick Meals' && (
+              {category.title === 'Pantry and Quick Meals' && bananaProgress > 0 && (
                 <BananaDisplay progress={bananaProgress} />
               )}
-              {category.title === 'Home and Dairy Basics' && (
+              {category.title === 'Home and Dairy Basics' && cleanerProgress > 0 && (
                 <CleanerDisplay progress={cleanerProgress} />
               )}
               <div>
