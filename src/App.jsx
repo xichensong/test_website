@@ -119,15 +119,7 @@ export default function App() {
     top: 0,
     size: 80,
   })
-  const activeModelTitle = [
-    { title: 'Drinks and Alcohol', progress: wineProgress },
-    { title: 'Snacks and Tobacco', progress: snackProgress },
-    { title: 'Pantry and Quick Meals', progress: bananaProgress },
-    { title: 'Home and Dairy Basics', progress: cleanerProgress },
-  ].reduce(
-    (active, model) => (model.progress > active.progress ? model : active),
-    { title: '', progress: 0 },
-  ).title
+
   useEffect(() => {
     const updateWordmark = () => {
       const progress = Math.min(Math.max(window.scrollY / 320, 0), 1)
@@ -293,18 +285,18 @@ export default function App() {
                     : null
               }
             >
-              {category.title === 'Drinks and Alcohol' &&
-                activeModelTitle === category.title &&
-                wineProgress > 0 && <WineDisplay progress={wineProgress} />}
-              {category.title === 'Snacks and Tobacco' &&
-                activeModelTitle === category.title &&
-                snackProgress > 0 && <SnackDisplay progress={snackProgress} />}
-              {category.title === 'Pantry and Quick Meals' &&
-                activeModelTitle === category.title &&
-                bananaProgress > 0 && <BananaDisplay progress={bananaProgress} />}
-              {category.title === 'Home and Dairy Basics' &&
-                activeModelTitle === category.title &&
-                cleanerProgress > 0 && <CleanerDisplay progress={cleanerProgress} />}
+              {category.title === 'Drinks and Alcohol' && wineProgress > 0 && (
+                <WineDisplay progress={wineProgress} />
+              )}
+              {category.title === 'Snacks and Tobacco' && snackProgress > 0 && (
+                <SnackDisplay progress={snackProgress} />
+              )}
+              {category.title === 'Pantry and Quick Meals' && bananaProgress > 0 && (
+                <BananaDisplay progress={bananaProgress} />
+              )}
+              {category.title === 'Home and Dairy Basics' && cleanerProgress > 0 && (
+                <CleanerDisplay progress={cleanerProgress} />
+              )}
               <div>
                 <p className="eyebrow">Mela Market</p>
                 <h2>{category.title}</h2>

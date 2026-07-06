@@ -136,9 +136,7 @@
 }
 
 .goods-section {
-  background:
-    linear-gradient(180deg, rgba(246, 196, 67, 0.08), rgba(201, 34, 34, 0.11)),
-    #07130d;
+  background: #000000;
 }
 
 .category-list {
