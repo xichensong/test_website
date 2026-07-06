@@ -5,6 +5,7 @@
     radial-gradient(circle at 12% 38%, rgba(246, 196, 67, 0.18), transparent 24rem),
     linear-gradient(180deg, #030303 0%, #07130d 44%, #161008 100%);
   color: #f8f1dc;
+  font-family: Georgia, 'Times New Roman', serif;
 }
 
 .hero {
@@ -62,7 +63,6 @@
 .embedded-title h1 {
   margin: 0;
   color: #090909;
-  font-family: Georgia, 'Times New Roman', serif;
   font-size: var(--wordmark-size, 80px);
   font-weight: 700;
   letter-spacing: 0;
@@ -152,7 +152,6 @@
   border-top: 1px solid rgba(246, 196, 67, 0.24);
   background: #000000;
   color: #f8f1dc;
-  font-family: Georgia, 'Times New Roman', serif;
 }
 
 .market-footer h2 {
