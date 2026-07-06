@@ -71,8 +71,7 @@ function BananaDisplay({ progress }) {
 }
 
 function WineModel() {
-  const { scene } = useGLTF('https://yvulkalxiqfoecqr.public.blob.vercel-storage.com/wine_bottles_01_4k.glb')
-
+  const { scene } = useGLTF('https://yvulkalxiqfoecqr.public.blob.vercel-storage.com/wine_bottles_01_4k.glb?download=1')
   return (
     <group rotation={[0, 0, 0]} scale={5.2}>
       <Center>
