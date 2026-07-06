@@ -3,24 +3,50 @@ import './App.css'
 
 const categories = [
   {
-    title: 'Drinks and Alcohol',
+    title: 'Liquor',
     items: [
       'Beer',
       'Wine',
+      'Mixers',
+      'Hard seltzer',
+      'Malt beverages',
+    ],
+    featureTitle: 'A neighborhood liquor stop since 2018.',
+    featureText:
+      'Liquor is one of Mela Market’s focus areas, with beer, wine, hard seltzers, malt beverages, and ready-to-drink options stocked for quick runs, gatherings, and regular neighborhood customers.',
+    groups: [
+      {
+        label: 'Wine',
+        items: [
+          'Sutter Home 1.5 oz',
+          'Black Box Pinot Grigio 3L',
+          'Sutter Home Pink Moscato 187 ml',
+          'Yellow Tail',
+        ],
+      },
+      {
+        label: 'Beer and Ready-to-Drink',
+        items: [
+          'Steel Reserve 40 oz NR',
+          'White Claw Surge 2/12 cans',
+          'Heineken Original 24 oz can',
+          'Smirnoff Ice 4/6 NR 12 oz',
+          'Stella Artois 25 fl oz can',
+        ],
+      },
+    ],
+    text: 'A dedicated beer and wine stop with familiar bottles, large-format options, cans, hard seltzers, and ready-to-drink favorites.',
+  },
+  {
+    title: 'Snacks, Drinks and Tobacco',
+    items: [
+      'Chips',
+      'Cigarettes',
       'Soda',
       'Juice',
       'Water',
       'Energy drinks',
       'Iced tea',
-      'Mixers',
-    ],
-    text: 'Cold drinks for a quick stop, party run, or dinner at home, with beer and wine alongside everyday sodas and juices.',
-  },
-  {
-    title: 'Snacks and Tobacco',
-    items: [
-      'Chips',
-      'Cigarettes',
       'Candy',
       'Gum',
       'Cookies',
@@ -28,7 +54,7 @@ const categories = [
       'Nuts',
       'Chocolate',
     ],
-    text: 'Grab-and-go snacks and tobacco products kept simple for fast neighborhood errands.',
+    text: 'Grab-and-go snacks, tobacco products, and everyday drinks kept simple for fast neighborhood errands.',
   },
   {
     title: 'Pantry and Quick Meals',
@@ -140,6 +166,21 @@ function getSectionProgress(section) {
   return Math.min(Math.max(entering, 0), Math.max(exiting, 0), 1)
 }
 
+function getLiquorProgress(section) {
+  if (!section) return 0
+
+  const rect = section.getBoundingClientRect()
+  const viewportHeight = window.innerHeight || 1
+  const enterStart = viewportHeight * 0.94
+  const enterEnd = viewportHeight * 0.5
+  const exitStart = -rect.height * 0.58
+  const exitEnd = -rect.height * 0.92
+  const entering = (enterStart - rect.top) / (enterStart - enterEnd)
+  const exiting = (rect.top - exitEnd) / (exitStart - exitEnd)
+
+  return Math.min(Math.max(entering, 0), Math.max(exiting, 0), 1)
+}
+
 export default function App() {
   const heroRef = useRef(null)
   const artRef = useRef(null)
@@ -171,7 +212,7 @@ export default function App() {
 
   useEffect(() => {
     const updateSectionModels = () => {
-      setWineProgress(getSectionProgress(drinksRef.current))
+      setWineProgress(getLiquorProgress(drinksRef.current))
       setSnackProgress(getSectionProgress(snacksRef.current))
       setBananaProgress(getSectionProgress(pantryRef.current))
       setCleanerProgress(getSectionProgress(homeRef.current))
@@ -302,9 +343,9 @@ export default function App() {
           {categories.map((category) => (
             <article
               className={`category-section${
-                category.title === 'Drinks and Alcohol'
-                  ? ' drinks-section'
-                  : category.title === 'Snacks and Tobacco'
+                category.title === 'Liquor'
+                  ? ' liquor-section'
+                  : category.title === 'Snacks, Drinks and Tobacco'
                     ? ' snacks-section'
                   : category.title === 'Pantry and Quick Meals'
                     ? ' pantry-section'
@@ -314,9 +355,9 @@ export default function App() {
               }`}
               key={category.title}
               ref={
-                category.title === 'Drinks and Alcohol'
+                category.title === 'Liquor'
                   ? drinksRef
-                  : category.title === 'Snacks and Tobacco'
+                  : category.title === 'Snacks, Drinks and Tobacco'
                     ? snacksRef
                   : category.title === 'Pantry and Quick Meals'
                     ? pantryRef
@@ -325,10 +366,10 @@ export default function App() {
                     : null
               }
             >
-              {category.title === 'Drinks and Alcohol' && wineProgress > 0 && (
+              {category.title === 'Liquor' && wineProgress > 0 && (
                 <WineDisplay progress={wineProgress} />
               )}
-              {category.title === 'Snacks and Tobacco' && snackProgress > 0 && (
+              {category.title === 'Snacks, Drinks and Tobacco' && snackProgress > 0 && (
                 <SnackDisplay progress={snackProgress} />
               )}
               {category.title === 'Pantry and Quick Meals' && bananaProgress > 0 && (
@@ -340,6 +381,12 @@ export default function App() {
               <div>
                 <p className="eyebrow">Mela Market</p>
                 <h2>{category.title}</h2>
+                {category.featureTitle && (
+                  <section className="liquor-feature">
+                    <h3>{category.featureTitle}</h3>
+                    <p>{category.featureText}</p>
+                  </section>
+                )}
               </div>
               <div>
                 <p>{category.text}</p>
@@ -348,6 +395,21 @@ export default function App() {
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
+                {category.groups && (
+                  <div className="featured-goods">
+                    <p className="featured-note">Items include and are not limited to:</p>
+                    {category.groups.map((group) => (
+                      <section key={group.label}>
+                        <h3>{group.label}</h3>
+                        <ul>
+                          {group.items.map((item) => (
+                            <li key={item}>{item}</li>
+                          ))}
+                        </ul>
+                      </section>
+                    ))}
+                  </div>
+                )}
               </div>
             </article>
           ))}

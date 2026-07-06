@@ -220,6 +220,16 @@
   overflow: hidden;
 }
 
+.liquor-section {
+  min-height: clamp(720px, 78vw, 940px);
+  padding-block: clamp(86px, 11vw, 152px);
+  background: #000000;
+}
+
+.liquor-section h2 {
+  font-size: clamp(4rem, 11vw, 9rem);
+}
+
 .category-section > div:not(.banana-display):not(.section-model-display) {
   position: relative;
   z-index: 2;
@@ -230,6 +240,31 @@
   color: #d9cab1;
   font-size: clamp(1rem, 1.5vw, 1.22rem);
   line-height: 1.65;
+}
+
+.liquor-feature {
+  display: grid;
+  gap: 14px;
+  max-width: 720px;
+  margin: clamp(26px, 4vw, 44px) 0 28px;
+  padding: clamp(22px, 3vw, 34px);
+  border: 1px solid rgba(246, 196, 67, 0.34);
+  background:
+    linear-gradient(135deg, rgba(246, 196, 67, 0.12), rgba(7, 131, 58, 0.09)),
+    rgba(0, 0, 0, 0.42);
+}
+
+.liquor-feature h3 {
+  margin: 0;
+  max-width: 620px;
+  color: #f8f1dc;
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  line-height: 0.98;
+}
+
+.liquor-feature p {
+  margin: 0;
+  max-width: 650px;
 }
 
 .category-section ul {
@@ -247,6 +282,46 @@
   background: rgba(0, 0, 0, 0.22);
   color: #fff8df;
   font-weight: 750;
+}
+
+.featured-goods {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  gap: 22px;
+  margin-top: 34px;
+  max-width: 780px;
+  padding: clamp(16px, 2vw, 24px);
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.28));
+}
+
+.featured-goods .featured-note {
+  margin: 0;
+  color: #f1c64a;
+  font-size: clamp(1.08rem, 1.7vw, 1.32rem);
+  font-weight: 850;
+}
+
+.featured-goods section {
+  display: grid;
+  gap: 12px;
+}
+
+.featured-goods h3 {
+  margin: 0;
+  color: #f1c64a;
+  font-size: clamp(1.35rem, 2.4vw, 2.1rem);
+  font-weight: 850;
+  letter-spacing: 0;
+}
+
+.featured-goods ul {
+  gap: 8px;
+}
+
+.featured-goods li {
+  background: rgba(246, 196, 67, 0.08);
+  border-color: rgba(246, 196, 67, 0.46);
 }
 
 .section-model-display,
@@ -284,6 +359,17 @@
   top: 51%;
   width: clamp(620px, 74vw, 1040px);
   height: min(220%, 720px);
+}
+
+.liquor-section .wine-display {
+  right: clamp(-84px, -5vw, -24px);
+  top: 58%;
+  width: clamp(520px, 58vw, 780px);
+  height: min(118%, 620px);
+}
+
+.liquor-section .wine-display img {
+  filter: brightness(1.18) contrast(1.08);
 }
 
 .snack-display,
