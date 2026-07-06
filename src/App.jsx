@@ -1,4 +1,4 @@
-import { Component, Suspense, useEffect, useRef, useState } from 'react'
+import { Component, Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import { Center, useGLTF } from '@react-three/drei'
 import './App.css'
@@ -54,29 +54,24 @@ class ModelErrorBoundary extends Component {
   }
 }
 
-function handleCanvasCreated({ gl }, onContextLost) {
+function handleCanvasCreated({ gl }) {
   gl.setClearAlpha(0)
   gl.domElement.addEventListener(
     'webglcontextlost',
     (event) => {
       event.preventDefault()
-      onContextLost()
     },
     false,
   )
 }
 
 function SafeModelCanvas({ camera, children }) {
-  const [canvasUnavailable, setCanvasUnavailable] = useState(false)
-
-  if (canvasUnavailable) return null
-
   return (
     <ModelErrorBoundary>
       <Canvas
         {...canvasSettings}
         camera={camera}
-        onCreated={(state) => handleCanvasCreated(state, () => setCanvasUnavailable(true))}
+        onCreated={handleCanvasCreated}
       >
         {children}
       </Canvas>
@@ -96,26 +91,29 @@ function disposeMaterial(material) {
 }
 
 function useClearModel(url, scene) {
+  const modelScene = useMemo(() => scene.clone(true), [scene])
+
   useEffect(() => {
     return () => {
-      scene.traverse((object) => {
+      modelScene.traverse((object) => {
         object.geometry?.dispose()
         disposeMaterial(object.material)
       })
-      useGLTF.clear(url)
     }
-  }, [scene, url])
+  }, [modelScene, url])
+
+  return modelScene
 }
 
 function BananaModel() {
   const modelUrl = '/models/bananas_4k.glb'
   const { scene } = useGLTF(modelUrl)
-  useClearModel(modelUrl, scene)
+  const modelScene = useClearModel(modelUrl, scene)
 
   return (
     <group rotation={[0.06, 0, -0.16]} scale={5.8}>
       <Center>
-        <primitive object={scene} />
+        <primitive object={modelScene} />
       </Center>
     </group>
   )
@@ -156,12 +154,12 @@ function BananaDisplay({ progress }) {
 function WineModel() {
   const modelUrl = '/models/wine_bottles_01_4k-v3.glb'
   const { scene } = useGLTF(modelUrl)
-  useClearModel(modelUrl, scene)
+  const modelScene = useClearModel(modelUrl, scene)
 
   return (
     <group rotation={[0, 0, 0]} scale={5.2}>
       <Center>
-        <primitive object={scene} />
+        <primitive object={modelScene} />
       </Center>
     </group>
   )
@@ -202,12 +200,12 @@ function WineDisplay({ progress }) {
 function SnackModel() {
   const modelUrl = '/models/long_life_food_4k.glb'
   const { scene } = useGLTF(modelUrl)
-  useClearModel(modelUrl, scene)
+  const modelScene = useClearModel(modelUrl, scene)
 
   return (
     <group rotation={[0, 0, 0]} scale={5.1}>
       <Center>
-        <primitive object={scene} />
+        <primitive object={modelScene} />
       </Center>
     </group>
   )
@@ -248,12 +246,12 @@ function SnackDisplay({ progress }) {
 function CleanerModel() {
   const modelUrl = '/models/all_purpose_cleaner_4k.glb'
   const { scene } = useGLTF(modelUrl)
-  useClearModel(modelUrl, scene)
+  const modelScene = useClearModel(modelUrl, scene)
 
   return (
     <group rotation={[0, 0, 0]} scale={5.2}>
       <Center>
-        <primitive object={scene} />
+        <primitive object={modelScene} />
       </Center>
     </group>
   )
@@ -373,18 +371,33 @@ export default function App() {
         heroRect.width / art.naturalWidth,
         heroRect.height / art.naturalHeight,
       )
+      const renderedWidth = art.naturalWidth * imageScale
       const renderedHeight = art.naturalHeight * imageScale
+      const isMobile = heroRect.width <= 560
+      const artOffsetX = isMobile
+        ? Math.min(0, heroRect.width * 0.5 - 478 * imageScale)
+        : 0
       const offsetY = (heroRect.height - renderedHeight) / 2
-      const left = 860 * imageScale
-      const top = offsetY + 875 * imageScale
-      const availableWidth = Math.max(heroRect.width - left - 24, 80)
-      const size = Math.min(154 * imageScale, availableWidth / 5.9)
+      let left = artOffsetX + 860 * imageScale
+      let top = offsetY + 875 * imageScale
+      let availableWidth = Math.max(heroRect.width - left - 24, 80)
+      let size = Math.min(154 * imageScale, availableWidth / 5.9)
+
+      if (isMobile) {
+        size = Math.max(30, Math.min(52, (heroRect.width - 128) / 5.9))
+        const maxLeft = Math.max(12, heroRect.width - size * 5.9 - 12)
+        left = Math.min(Math.max(artOffsetX + 615 * imageScale, 86), maxLeft)
+        top = offsetY + 872 * imageScale
+      }
 
       setWordmarkLayout({
         left,
         top,
         size: Math.max(size, 20),
       })
+
+      hero.style.setProperty('--hero-art-offset-x', `${artOffsetX}px`)
+      hero.style.setProperty('--hero-art-rendered-width', `${renderedWidth}px`)
     }
 
     updateLayout()

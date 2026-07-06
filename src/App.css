@@ -283,6 +283,13 @@
 }
 
 @media (max-width: 560px) {
+  .hero-art {
+    width: var(--hero-art-rendered-width, 100%);
+    max-width: none;
+    object-fit: fill;
+    transform: translateX(var(--hero-art-offset-x, 0));
+  }
+
   .embedded-title .eyebrow {
     font-size: 0.66rem;
   }
