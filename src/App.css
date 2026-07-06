@@ -207,9 +207,13 @@
     transform 220ms ease-out;
 }
 
-.section-model-display canvas,
-.banana-display canvas {
+.section-model-display img,
+.banana-display img {
   display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
 }
 
 .wine-display {

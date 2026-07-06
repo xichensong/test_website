@@ -1,6 +1,4 @@
-import { Component, Suspense, useEffect, useMemo, useRef, useState } from 'react'
-import { Canvas, useThree } from '@react-three/fiber'
-import { Center, useGLTF } from '@react-three/drei'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 
 const categories = [
@@ -26,266 +24,66 @@ const categories = [
   },
 ]
 
-const canvasSettings = {
-  dpr: [1, 1.25],
-  frameloop: 'demand',
-  gl: {
-    alpha: true,
-    antialias: false,
-    failIfMajorPerformanceCaveat: false,
-    powerPreference: 'high-performance',
-  },
-}
-
-class ModelErrorBoundary extends Component {
-  state = { hasError: false }
-
-  static getDerivedStateFromError() {
-    return { hasError: true }
-  }
-
-  componentDidCatch(error) {
-    console.warn('3D model failed to render:', error)
-  }
-
-  render() {
-    if (this.state.hasError) return null
-    return this.props.children
-  }
-}
-
-function handleCanvasCreated({ gl }) {
-  gl.setClearAlpha(0)
-  gl.domElement.addEventListener(
-    'webglcontextlost',
-    (event) => {
-      event.preventDefault()
-    },
-    false,
-  )
-}
-
-function SafeModelCanvas({ camera, children }) {
+function ModelImageDisplay({
+  className,
+  progress,
+  progressProperty = '--section-model-progress',
+  src,
+  alt,
+}) {
   return (
-    <ModelErrorBoundary>
-      <Canvas
-        {...canvasSettings}
-        camera={camera}
-        onCreated={handleCanvasCreated}
-      >
-        {children}
-      </Canvas>
-    </ModelErrorBoundary>
+    <div
+      className={className}
+      aria-label={alt}
+      style={{ [progressProperty]: progress }}
+    >
+      <img src={src} alt="" aria-hidden="true" />
+    </div>
   )
-}
-
-function disposeMaterial(material) {
-  const materials = Array.isArray(material) ? material : [material]
-
-  materials.filter(Boolean).forEach((item) => {
-    Object.values(item).forEach((value) => {
-      if (value?.isTexture) value.dispose()
-    })
-    item.dispose?.()
-  })
-}
-
-function useClearModel(url, scene) {
-  const modelScene = useMemo(() => scene.clone(true), [scene])
-
-  useEffect(() => {
-    return () => {
-      modelScene.traverse((object) => {
-        object.geometry?.dispose()
-        disposeMaterial(object.material)
-      })
-    }
-  }, [modelScene, url])
-
-  return modelScene
-}
-
-function BananaModel() {
-  const modelUrl = '/models/bananas_4k.glb'
-  const { scene } = useGLTF(modelUrl)
-  const modelScene = useClearModel(modelUrl, scene)
-
-  return (
-    <group rotation={[0.06, 0, -0.16]} scale={5.8}>
-      <Center>
-        <primitive object={modelScene} />
-      </Center>
-    </group>
-  )
-}
-
-function BananaCamera() {
-  const { camera } = useThree()
-
-  useEffect(() => {
-    camera.position.set(0, -5.6, 1.35)
-    camera.lookAt(0, 0, 0)
-    camera.updateProjectionMatrix()
-  }, [camera])
-
-  return null
 }
 
 function BananaDisplay({ progress }) {
   return (
-    <div
+    <ModelImageDisplay
       className="banana-display"
-      aria-label="3D banana model"
-      style={{ '--banana-progress': progress }}
-    >
-      <SafeModelCanvas camera={{ fov: 30, near: 0.1, far: 100 }}>
-        <BananaCamera />
-        <ambientLight intensity={1.6} />
-        <directionalLight position={[4, -5, 6]} intensity={2.2} />
-        <directionalLight position={[-4, -2, -3]} intensity={0.8} />
-        <Suspense fallback={null}>
-          <BananaModel />
-        </Suspense>
-      </SafeModelCanvas>
-    </div>
+      progress={progress}
+      progressProperty="--banana-progress"
+      src="/models/banana-snapshot.png"
+      alt="Banana product image"
+    />
   )
-}
-
-function WineModel() {
-  const modelUrl = '/models/wine_bottles_01_4k-v3.glb'
-  const { scene } = useGLTF(modelUrl)
-  const modelScene = useClearModel(modelUrl, scene)
-
-  return (
-    <group rotation={[0, 0, 0]} scale={5.2}>
-      <Center>
-        <primitive object={modelScene} />
-      </Center>
-    </group>
-  )
-}
-
-function WineCamera() {
-  const { camera } = useThree()
-
-  useEffect(() => {
-    camera.position.set(0, 0, 6.2)
-    camera.lookAt(0, 0, 0)
-    camera.updateProjectionMatrix()
-  }, [camera])
-
-  return null
 }
 
 function WineDisplay({ progress }) {
   return (
-    <div
+    <ModelImageDisplay
       className="section-model-display wine-display"
-      aria-label="3D wine bottles model"
-      style={{ '--section-model-progress': progress }}
-    >
-      <SafeModelCanvas camera={{ fov: 28, near: 0.1, far: 100 }}>
-        <WineCamera />
-        <ambientLight intensity={1.5} />
-        <directionalLight position={[4, -5, 6]} intensity={2.4} />
-        <directionalLight position={[-4, -2, -3]} intensity={0.75} />
-        <Suspense fallback={null}>
-          <WineModel />
-        </Suspense>
-      </SafeModelCanvas>
-    </div>
+      progress={progress}
+      src="/models/wine-snapshot.png"
+      alt="Wine bottles product image"
+    />
   )
-}
-
-function SnackModel() {
-  const modelUrl = '/models/long_life_food_4k.glb'
-  const { scene } = useGLTF(modelUrl)
-  const modelScene = useClearModel(modelUrl, scene)
-
-  return (
-    <group rotation={[0, 0, 0]} scale={5.1}>
-      <Center>
-        <primitive object={modelScene} />
-      </Center>
-    </group>
-  )
-}
-
-function SnackCamera() {
-  const { camera } = useThree()
-
-  useEffect(() => {
-    camera.position.set(0, 0, 6)
-    camera.lookAt(0, 0, 0)
-    camera.updateProjectionMatrix()
-  }, [camera])
-
-  return null
 }
 
 function SnackDisplay({ progress }) {
   return (
-    <div
+    <ModelImageDisplay
       className="section-model-display snack-display"
-      aria-label="3D packaged food model"
-      style={{ '--section-model-progress': progress }}
-    >
-      <SafeModelCanvas camera={{ fov: 30, near: 0.1, far: 100 }}>
-        <SnackCamera />
-        <ambientLight intensity={1.55} />
-        <directionalLight position={[4, -5, 6]} intensity={2.2} />
-        <directionalLight position={[-4, -2, -3]} intensity={0.8} />
-        <Suspense fallback={null}>
-          <SnackModel />
-        </Suspense>
-      </SafeModelCanvas>
-    </div>
+      progress={progress}
+      src="/models/snack-snapshot.png"
+      alt="Packaged food product image"
+    />
   )
-}
-
-function CleanerModel() {
-  const modelUrl = '/models/all_purpose_cleaner_4k.glb'
-  const { scene } = useGLTF(modelUrl)
-  const modelScene = useClearModel(modelUrl, scene)
-
-  return (
-    <group rotation={[0, 0, 0]} scale={5.2}>
-      <Center>
-        <primitive object={modelScene} />
-      </Center>
-    </group>
-  )
-}
-
-function CleanerCamera() {
-  const { camera } = useThree()
-
-  useEffect(() => {
-    camera.position.set(0, 0, 6)
-    camera.lookAt(0, 0, 0)
-    camera.updateProjectionMatrix()
-  }, [camera])
-
-  return null
 }
 
 function CleanerDisplay({ progress }) {
   return (
-    <div
+    <ModelImageDisplay
       className="section-model-display cleaner-display"
-      aria-label="3D cleaner bottle model"
-      style={{ '--section-model-progress': progress }}
-    >
-      <SafeModelCanvas camera={{ fov: 30, near: 0.1, far: 100 }}>
-        <CleanerCamera />
-        <ambientLight intensity={1.55} />
-        <directionalLight position={[4, -5, 6]} intensity={2.2} />
-        <directionalLight position={[-4, -2, -3]} intensity={0.8} />
-        <Suspense fallback={null}>
-          <CleanerModel />
-        </Suspense>
-      </SafeModelCanvas>
-    </div>
+      progress={progress}
+      src="/models/cleaner-snapshot.png"
+      alt="Cleaner product image"
+    />
   )
 }
 
@@ -330,7 +128,6 @@ export default function App() {
     (active, model) => (model.progress > active.progress ? model : active),
     { title: '', progress: 0 },
   ).title
-
   useEffect(() => {
     const updateWordmark = () => {
       const progress = Math.min(Math.max(window.scrollY / 320, 0), 1)
